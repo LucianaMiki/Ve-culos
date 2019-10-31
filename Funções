@@ -1,0 +1,135 @@
+#pragma once
+
+void show_menu() {
+	cout << "************MENU**************" << endl;
+	cout << "*    301 - Incluir veiculo " << endl;
+	cout << "*    401 - Listar  veiculo " << endl;
+	cout << "*    501 - Incluir utilizacao " << endl;
+	cout << "*    601 - Listar utilizacao " << endl;
+	cout << "*    701 - Incluir revisao " << endl;
+	cout << "*    901 - Listar revisao " << endl;
+	cout << "*    089 - Gerar relatorio " << endl;
+	cout << "*    000 - Sair " << endl;
+	cout << "* Opcao desejada: ";
+}
+
+int receberNumero() {
+	int numero;
+	cout << "Entre com um numero" << endl;
+	cin >> numero;
+	return numero;
+}
+
+char receberCaracter() {
+	char entrada;
+	cout << "Entre com um Caracter" << endl;
+	cin >> entrada;
+	return entrada;
+}
+
+int include_posit(char vetor[TAMANHO], int posit) {
+	char entrada = receberCaracter();
+	vetor[posit++] = entrada;
+	return posit;
+}
+
+void show(char vetor[TAMANHO], int i, int posit) {
+	if (i == posit) {
+		cout << "------------------" << endl;
+		return;
+	}
+	if (i == 0) {
+		cout << "------------------" << endl;
+	}
+	cout << "Posicao " << i << ": " << vetor[i] << endl;
+	show(vetor, i + 1, posit);
+}
+
+void incluir_ut() {
+	int kmi, kmf, veiculo;
+	cout << "Digite a posicao do veiculo desejado: ";
+	veiculo = receberNumero();
+	cout << "Digite a quilometragem inicial: ";
+	kmi = receberNumero();
+	cout << "Digite a quilometragem final: ";
+	kmf = receberNumero();
+	utilizacao[ut_posit][0] = veiculo;
+	utilizacao[ut_posit][1] = kmi;
+	utilizacao[ut_posit][2] = kmf;
+	ut_posit++;
+
+	total_km[veiculo] += (kmf - kmi);
+	return;
+}
+
+void listar_ut(int matriz[LINHAS][COLUNAS], int i, int posit) {
+	if (i == posit) {
+		cout << "------------------" << endl;
+		return;
+	}
+	if (i == 0) {
+		cout << "------------------" << endl;
+	}
+	cout << "Utilizacao " << i << ": " << matriz[i][0] << ", KM Inicial: " << matriz[i][1] << ", KM Final: " << matriz[i][2] << endl;
+	listar_ut(matriz, i + 1, posit);
+}
+
+void incluir_rev() {
+	int dia, mes, ano, veiculo;
+	cout << "Digite a posicao do veiculo desejado: ";
+	veiculo = receberNumero();
+	if (total_km[veiculo] >= 15000) {
+		cout << "Digite o dia da revisao: ";
+		dia = receberNumero();
+		cout << "Digite o mes da revisao: ";
+		mes = receberNumero();
+		cout << "Digite o ano da revisao: ";
+		ano = receberNumero();
+		
+		revisao[rev_posit][0] = veiculo;
+		revisao[rev_posit][1] = dia;
+		revisao[rev_posit][2] = mes;
+		revisao[rev_posit][3] = ano;
+		rev_posit++;
+
+	}
+	else {
+		cout << "Nao e necessaria a revisao." << endl;
+		return;
+	}
+
+	return;
+}
+
+void listar_rev(int matriz[LINHAS][COLUNAS2], int i, int posit) {
+	if (i == posit) {
+		cout << "------------------" << endl;
+		return;
+	}
+	if (i == 0) {
+		cout << "------------------" << endl;
+	}
+	int tot = total_km[i] + 15000;
+	cout << "Revisao " << i << ": " << matriz[i][0] << ", Data: " << matriz[i][1] << "/" << matriz[i][2] << "/" << matriz[i][3] << ", KM: "<< total_km[i] <<" <- Proxima revisao aos "<<tot<<endl;
+	listar_rev(matriz, i + 1, posit);
+}
+
+void gerar_relatorio(int i, int posit) {
+	if (i == posit) {
+		cout << "------------------" << endl;
+		return;
+	}
+	if (i == 0) {
+		cout << "------------------" << endl;
+	}
+
+
+	cout << "________Relatorio Geral__________" << endl;
+	cout << "Carro: " << veiculos[i] << ", KM: " << total_km[i];
+	if(total_km[i]>=15000) cout<< " - Ultima Revisao: " << revisao[i][1] << "/" << revisao[i][2] << "/" << revisao[i][3] <<'.'<< endl;
+	else cout << " - Nao passou por revisao." << endl;
+
+	gerar_relatorio(i+1, posit);
+
+	return;
+}
