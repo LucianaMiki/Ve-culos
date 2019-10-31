@@ -10,9 +10,10 @@ void show_menu() {
 	cout << "*    901 - Listar revisao " << endl;
 	cout << "*    089 - Gerar relatorio " << endl;
 	cout << "*    000 - Sair " << endl;
-	cout << "* Opcao desejada: ";
+	cout << "*    Digite a opcao desejada: " << endl;
+	cout << "******************************" << endl;
 }
-
+//--------------------------------------PARA RECEBER NUMERO E CARACTER---------------------------------------------//
 int receberNumero() {
 	int numero;
 	cout << "Entre com um numero" << endl;
@@ -26,14 +27,23 @@ char receberCaracter() {
 	cin >> entrada;
 	return entrada;
 }
+//--------------------------------------------------VEÍCULOS------------------------------------------------------//
+int include_veiculo(VEICULO vetor[TAMANHO], int posit)
+{
+	VEICULO v;
+	cout << "Cadastro do carro na posicao " << posit << endl;
+	cout << "Insira a placa do veiculo sem espacos" << endl;
+	cin >> v.placa;
+	cout << "Insira o modelo do veiculo sem espacos" << endl;
+	cin >> v.modelo;
 
-int include_posit(char vetor[TAMANHO], int posit) {
-	char entrada = receberCaracter();
-	vetor[posit++] = entrada;
+	vetor[posit] = v;
+	posit++;
 	return posit;
 }
 
-void show(char vetor[TAMANHO], int i, int posit) {
+void exibir_veiculo(VEICULO vetor[TAMANHO], int i, int posit)
+{
 	if (i == posit) {
 		cout << "------------------" << endl;
 		return;
@@ -41,81 +51,73 @@ void show(char vetor[TAMANHO], int i, int posit) {
 	if (i == 0) {
 		cout << "------------------" << endl;
 	}
-	cout << "Posicao " << i << ": " << vetor[i] << endl;
-	show(vetor, i + 1, posit);
+	VEICULO v = vetor[i];
+	cout << "Posicao: " << i << endl;
+	cout << "Placa: " << v.placa << endl;
+	cout << "Modelo do veiculo: " << v.modelo << endl;
+	exibir_veiculo(vetor, i + 1, posit);
 }
-
-void incluir_ut() {
-	int kmi, kmf, veiculo;
+//-----------------------------------------------------UTILIZAÇÃO----------------------------------------------------//
+void incluir_utilizacao() {
+	int PosicaoVeiculo, KmI, KmF;
 	cout << "Digite a posicao do veiculo desejado: ";
-	veiculo = receberNumero();
+	cin >> PosicaoVeiculo;
 	cout << "Digite a quilometragem inicial: ";
-	kmi = receberNumero();
+	cin >> KmI;
 	cout << "Digite a quilometragem final: ";
-	kmf = receberNumero();
-	utilizacao[ut_posit][0] = veiculo;
-	utilizacao[ut_posit][1] = kmi;
-	utilizacao[ut_posit][2] = kmf;
-	ut_posit++;
+	cin >> KmF;
 
-	total_km[veiculo] += (kmf - kmi);
+	listaUtilizacao[ut_posit].veiculo = PosicaoVeiculo;
+	listaUtilizacao[ut_posit].kmInicial = KmI;
+	listaUtilizacao[ut_posit].kmFinal = KmF;
+
+	ut_posit++;
+	total_km[PosicaoVeiculo] += (KmF - KmI);
 	return;
 }
 
-void listar_ut(int matriz[LINHAS][COLUNAS], int i, int posit) {
-	if (i == posit) {
-		cout << "------------------" << endl;
+void exibir_utilizacao(int i) {
+	if (i == ut_posit) {
 		return;
 	}
-	if (i == 0) {
-		cout << "------------------" << endl;
-	}
-	cout << "Utilizacao " << i << ": " << matriz[i][0] << ", KM Inicial: " << matriz[i][1] << ", KM Final: " << matriz[i][2] << endl;
-	listar_ut(matriz, i + 1, posit);
-}
+	cout << "-----------------------------------" << endl;
+	cout << "Posicao do carro: " << listaUtilizacao[i].veiculo << endl;
 
-void incluir_rev() {
+	cout << "Quilometragem inicial do carro: " << listaUtilizacao[i].kmInicial << endl;
+
+	cout << "Quilometragem final do carro: " << listaUtilizacao[i].kmFinal << endl;
+	cout << "-----------------------------------" << endl;
+
+	exibir_utilizacao(i + 1);
+}
+//------------------------------------------------REVISÃO-------------------------------------------------------//
+void incluir_revisao() {
 	int dia, mes, ano, veiculo;
 	cout << "Digite a posicao do veiculo desejado: ";
-	veiculo = receberNumero();
+	cin >> veiculo;
 	if (total_km[veiculo] >= 15000) {
-		cout << "Digite o dia da revisao: ";
+		cout << "Digite o dia da ultima revisao: " << endl;
 		dia = receberNumero();
-		cout << "Digite o mes da revisao: ";
+		cout << "Digite o mes da ultima revisao: " << endl;
 		mes = receberNumero();
-		cout << "Digite o ano da revisao: ";
+		cout << "Digite o ano da ultima revisao: " << endl;
 		ano = receberNumero();
-		
-		revisao[rev_posit][0] = veiculo;
-		revisao[rev_posit][1] = dia;
-		revisao[rev_posit][2] = mes;
-		revisao[rev_posit][3] = ano;
-		rev_posit++;
 
+		listaRevisao[rev_posit].veiculo = veiculo;
+		listaRevisao[rev_posit].dia = dia;
+		listaRevisao[rev_posit].mes = mes;
+		listaRevisao[rev_posit].ano = ano;
+		rev_posit++;
 	}
 	else {
-		cout << "Nao e necessaria a revisao." << endl;
+		cout << "Nao eh necessaria a revisao" << endl;
+		rev_posit++;
 		return;
 	}
-
-	return;
 }
 
-void listar_rev(int matriz[LINHAS][COLUNAS2], int i, int posit) {
-	if (i == posit) {
-		cout << "------------------" << endl;
-		return;
-	}
-	if (i == 0) {
-		cout << "------------------" << endl;
-	}
-	int tot = total_km[i] + 15000;
-	cout << "Revisao " << i << ": " << matriz[i][0] << ", Data: " << matriz[i][1] << "/" << matriz[i][2] << "/" << matriz[i][3] << ", KM: "<< total_km[i] <<" <- Proxima revisao aos "<<tot<<endl;
-	listar_rev(matriz, i + 1, posit);
-}
-
-void gerar_relatorio(int i, int posit) {
-	if (i == posit) {
+void exibir_revisao(int i) {
+	if (i == rev_posit) {
 		cout << "------------------" << endl;
 		return;
 	}
@@ -123,13 +125,32 @@ void gerar_relatorio(int i, int posit) {
 		cout << "------------------" << endl;
 	}
 
-
-	cout << "________Relatorio Geral__________" << endl;
-	cout << "Carro: " << veiculos[i] << ", KM: " << total_km[i];
-	if(total_km[i]>=15000) cout<< " - Ultima Revisao: " << revisao[i][1] << "/" << revisao[i][2] << "/" << revisao[i][3] <<'.'<< endl;
-	else cout << " - Nao passou por revisao." << endl;
-
-	gerar_relatorio(i+1, posit);
-
+	cout << "Revisao " << i << " : " << endl;
+	cout << "Carro na posicao: " << listaRevisao[i].veiculo << endl;
+	cout << "Data da revisao: " << listaRevisao[i].dia << "/" << listaRevisao[i].mes << "/" << listaRevisao[i].ano << endl;
+	exibir_revisao(i + 1);
+}
+//----------------------------------------------------RELATORIO-------------------------------------------------//
+void gerar_relatorio(int i) {
+	if (i == rev_posit) {
+		return;
+	}
+	if (i >= 0) {
+		cout << "________Relatorio Geral__________" << endl;
+	}
+	cout << "Carro na posicao " << i << " : " << endl;
+	cout << "Placa: " << listaVeiculo[i].placa << endl;
+	cout << "Modelo: " << listaVeiculo[i].modelo << endl;
+	cout << "Total de km rodados: " << total_km[i] << endl;
+	if (total_km[i] >= 15000) {
+		cout << "Ultima revisao feita na data: " << listaRevisao[i].dia << "/";
+		cout << listaRevisao[i].mes << "/";
+		cout << listaRevisao[i].ano << endl;
+		cout << "necessario renovar revisao!" << endl;
+	}
+	else {
+		cout << "O carro nao passou por revisao por nao atingir a quilometragem limite" << endl;
+	}
+	gerar_relatorio(i + 1);
 	return;
 }
