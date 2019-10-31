@@ -1,0 +1,48 @@
+#pragma once
+#define VE_INCLUIR 301
+#define VE_LISTAR 401
+#define UT_INCLUIR 501
+#define UT_LISTAR 601
+#define REV_INCLUIR 701
+#define REV_LISTAR 901
+#define RELATORIO 89
+#define EXIT 0
+
+#define TAMANHO  20
+#define LINHAS  6
+#define COLUNAS  3
+#define COLUNAS2 4
+
+char veiculos[TAMANHO];
+int km_inicial[TAMANHO];
+int km_final[TAMANHO];
+int total_km[TAMANHO];
+
+int utilizacao[LINHAS][COLUNAS];
+int revisao[LINHAS][COLUNAS2];
+
+int ve_posit;
+int ut_posit;
+int rev_posit;
+
+typedef struct VEICULO {
+	char placa[20];
+	char modelo[50];
+};
+
+typedef struct UTILIZACAO {
+	int veiculo;
+	int kmInicial;
+	int kmFinal;
+};
+
+typedef struct REVISAO {
+	int veiculo;
+	int dia;
+	int mes;
+	int ano;
+};
+
+VEICULO listaVeiculo[TAMANHO];
+UTILIZACAO listaUtilizacao[TAMANHO];
+REVISAO listaRevisao[TAMANHO];
