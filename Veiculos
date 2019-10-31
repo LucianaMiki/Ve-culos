@@ -1,49 +1,46 @@
-// ConsoleApplication1.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 #include "constantes.h"
 #include "funcoes.h"
 
-int main(){
+int main() {
 
 	int op;
 	ve_posit = 0;
 	ut_posit = 0;
 	rev_posit = 0;
-	for (int i = 0;i < TAMANHO;i++) total_km[i] = 0;
+	for (int i = 0; i < TAMANHO; i++) total_km[i] = 0;
 
 	do {
 		show_menu();
 		op = receberNumero();
 		switch (op) {
-			case VE_LISTAR:
-				show(veiculos, 0, ve_posit);
-				break;
-			case VE_INCLUIR:
-				ve_posit = include_posit(veiculos, ve_posit);
-				break;
-			case UT_LISTAR:
-				listar_ut(utilizacao, 0, ut_posit);
-				break;
-			case UT_INCLUIR:
-				incluir_ut();
-				break;
-			case REV_LISTAR:
-				listar_rev(revisao, 0, rev_posit);
-				break;
-			case REV_INCLUIR:
-				incluir_rev();
-				break;
-			case RELATORIO:
-				gerar_relatorio(0, ve_posit);
-				break;
-			default:
-				cout << "Opcao invalida! :(" << endl;
-				break;
+		case VE_INCLUIR:
+			ve_posit = include_veiculo(listaVeiculo, ve_posit);
+			break;
+		case VE_LISTAR:
+			exibir_veiculo(listaVeiculo, 0, ve_posit);
+			break;
+		case UT_INCLUIR:
+			incluir_utilizacao();
+			break;
+		case UT_LISTAR:
+			exibir_utilizacao(0);
+			break;
+		case REV_INCLUIR:
+			incluir_revisao();
+			break;
+		case REV_LISTAR:
+			exibir_revisao(0);
+			break;
+		case RELATORIO:
+			gerar_relatorio(0);
+			break;
+		default:
+			cout << "Opcao invalida! :(" << endl;
+			break;
 		}
 
-	} while(op != EXIT);
+	} while (op != EXIT);
 
-    return 0;
+	return 0;
 }
